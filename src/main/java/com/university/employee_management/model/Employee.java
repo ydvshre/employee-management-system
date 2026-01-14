@@ -12,8 +12,10 @@ import java.time.Period;
 public class Employee {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer employeeId;
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+@Column(name = "employee_id")
+private Integer employeeId;
+
 
     // ================= DEPARTMENT =================
     private String title;
