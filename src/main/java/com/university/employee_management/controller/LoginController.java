@@ -2,11 +2,10 @@ package com.university.employee_management.controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.context.annotation.Profile;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
-@Profile("!render")
+
 @Controller
 public class LoginController {
 
