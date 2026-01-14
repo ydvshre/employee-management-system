@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>View Employees</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef1f6;
+        }
+
+        .container {
+            width: 96%;
+            margin: 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.08);
+        }
+
+        /* ---------- HEADER ---------- */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h2 {
+            margin: 0;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-box input {
+            padding: 8px;
+            width: 180px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .search-box button {
+            padding: 8px 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background: #f4f6f9;
+            cursor: pointer;
+        }
+
+        /* ---------- TABLE ---------- */
+        .table-wrapper {
+            margin-top: 25px;
+            overflow-x: auto;
+            max-height: 550px;
+            border: 1px solid #ddd;
+        }
+
+        table {
+            width: 100%;
+            min-width: 1900px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        th {
+            background: #f4f6f9;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* ---------- FOOTER ---------- */
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            font-size: 15px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #f4f6f9;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+
+        .btn:hover {
+            background: #e0e4ec;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h2>Employee List</h2>
+
+        <!-- 🔑 ROLE PRESERVED HERE -->
+        <form class="search-box" action="/employee/search" method="get">
+            <input type="hidden" name="role" th:value="${role}">
+            <input type="number" name="employeeId" placeholder="Employee ID">
+            <button type="submit">Search</button>
+        </form>
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Employee ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Designation</th>
+                <th>Pay Scale</th>
+                <th>Basic Salary</th>
+                <th>Employee Class</th>
+                <th>Nature of Appointment</th>
+                <th>Date of Joining</th>
+                <th>Confirmation Date</th>
+                <th>Father Name</th>
+                <th>Mother Name</th>
+                <th>Gender</th>
+                <th>Marital Status</th>
+                <th>Spouse Name</th>
+                <th>Date of Birth</th>
+                <th>Category</th>
+                <th>Email</th>
+                <th>Mobile</th>
+                <th>City</th>
+                <th>State</th>
+                <th>Aadhaar</th>
+                <th>License</th>
+                <th>Address</th>
+<th>Contract Start</th>
+<th>Contract End</th>
+
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="emp, stat : ${employees}">
+                <td th:text="${stat.index + 1}"></td>
+                <td th:text="${emp.employeeId}"></td>
+               <td th:text="${emp.firstName 
+        + (emp.middleName != null && !emp.middleName.isEmpty() ? ' ' + emp.middleName : '') 
+        + ' ' + emp.lastName}">
+</td>
+
+                <td th:text="${emp.department}"></td>
+                <td th:text="${emp.designation}"></td>
+                <td th:text="${emp.payScale}"></td>
+                <td th:text="${emp.basicSalary}"></td>
+                <td th:text="${emp.employeeClass}"></td>
+                <td th:text="${emp.natureOfAppointment}"></td>
+                <td th:text="${emp.dateOfJoining}"></td>
+                <td th:text="${emp.confirmationDate}"></td>
+                <td th:text="${emp.fatherName}"></td>
+                <td th:text="${emp.motherName}"></td>
+                <td th:text="${emp.gender}"></td>
+                <td th:text="${emp.maritalStatus}"></td>
+                <td th:text="${emp.spouseName}"></td>
+                <td th:text="${emp.dateOfBirth}"></td>
+                <td th:text="${emp.category}"></td>
+                <td th:text="${emp.email}"></td>
+                <td th:text="${emp.mobile}"></td>
+                <td th:text="${emp.city}"></td>
+                <td th:text="${emp.state}"></td>
+                <td th:text="${emp.aadhaarNumber}"></td>
+                <td th:text="${emp.drivingLicenseNumber}"></td>
+                <td th:text="${emp.address}"></td>
+<td th:text="${emp.contractStartDate}"></td>
+<td th:text="${emp.contractEndDate}"></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ===== FOOTER ===== -->
+    <div class="footer">
+
+        <a th:href="@{${backUrl}}" class="btn">Back to Dashboard</a>
+
+    </div>
+
+</div>
+
+</body>
+</html>

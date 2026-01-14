@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Details</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef1f6;
+            padding: 30px;
+        }
+        .container {
+            background: white;
+            padding: 25px;
+            max-width: 900px;
+            margin: auto;
+            border-radius: 8px;
+        }
+        h2, h3 {
+            text-align: center;
+        }
+        p {
+            margin: 6px 0;
+        }
+        hr {
+            margin: 20px 0;
+        }
+        .actions {
+            margin-top: 25px;
+            text-align: center;
+        }
+        button {
+            padding: 8px 16px;
+            margin: 5px;
+        }
+        .back {
+            margin-top: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Employee Details</h2>
+
+<!-- ================= BASIC ================= -->
+<p><b>Employee ID:</b> <span th:text="${employee.employeeId}"></span></p>
+<p><b>Title:</b> <span th:text="${employee.title}"></span></p>
+<p><b>First Name:</b> <span th:text="${employee.firstName}"></span></p>
+<p><b>Last Name:</b> <span th:text="${employee.lastName}"></span></p>
+
+<hr>
+
+<!-- ================= DEPARTMENT & PROFESSIONAL ================= -->
+<h3>Department & Professional Information</h3>
+
+<p><b>Department:</b> <span th:text="${employee.department}"></span></p>
+<p><b>Designation:</b> <span th:text="${employee.designation}"></span></p>
+<p><b>Pay Scale:</b> <span th:text="${employee.payScale}"></span></p>
+<p><b>Basic Salary:</b> <span th:text="${employee.basicSalary}"></span></p>
+<p><b>Employee Class:</b> <span th:text="${employee.employeeClass}"></span></p>
+<p><b>Nature of Appointment:</b> <span th:text="${employee.natureOfAppointment}"></span></p>
+<p><b>Date of Joining:</b> <span th:text="${employee.dateOfJoining}"></span></p>
+<p><b>Confirmation Date:</b> <span th:text="${employee.confirmationDate}"></span></p>
+
+<hr>
+
+<!-- ================= PERSONAL ================= -->
+<h3>Personal Information</h3>
+
+<p><b>Father Name:</b> <span th:text="${employee.fatherName}"></span></p>
+<p><b>Mother Name:</b> <span th:text="${employee.motherName}"></span></p>
+<p><b>Marital Status:</b> <span th:text="${employee.maritalStatus}"></span></p>
+<p><b>Spouse Name:</b> <span th:text="${employee.spouseName}"></span></p>
+<p><b>Date of Birth:</b> <span th:text="${employee.dateOfBirth}"></span></p>
+<p><b>Gender:</b> <span th:text="${employee.gender}"></span></p>
+<p><b>Category:</b> <span th:text="${employee.category}"></span></p>
+
+<hr>
+
+<!-- ================= CONTACT ================= -->
+<h3>Contact Information</h3>
+
+<p><b>Email:</b> <span th:text="${employee.email}"></span></p>
+<p><b>Mobile:</b> <span th:text="${employee.mobile}"></span></p>
+<p><b>Address:</b> <span th:text="${employee.address}"></span></p>
+<p><b>City:</b> <span th:text="${employee.city}"></span></p>
+<p><b>State:</b> <span th:text="${employee.state}"></span></p>
+
+<hr>
+
+<div th:if="${isAdmin}">
+    <a th:href="@{/admin/edit(employeeId=${employee.employeeId})}" class="btn">Edit</a>
+
+    <form th:action="@{/admin/delete}" method="post" style="display:inline">
+        <input type="hidden" name="employeeId"
+               th:value="${employee.employeeId}">
+        <button class="btn">Delete</button>
+    </form>
+</div>
+
+<!-- ================= ADMIN ACTIONS ================= -->
+<div class="actions" th:if="${isAdmin != null and isAdmin}">
+
+
+    <form action="/admin/editEmployee" method="get" style="display:inline;">
+        <input type="hidden" name="employeeId" th:value="${employee.employeeId}">
+        <button type="submit">Edit Employee</button>
+    </form>
+
+    <form action="/admin/deleteEmployee" method="post" style="display:inline;"
+          onsubmit="return confirm('Are you sure you want to delete this employee?');">
+        <input type="hidden" name="employeeId" th:value="${employee.employeeId}">
+        <button type="submit">Delete Employee</button>
+    </form>
+</div>
+
+<!-- ================= BACK ================= -->
+<div class="back">
+   <a href="/admin/home">
+    <button>Back to Dashboard</button>
+</a>
+</div>
+
+</div>
+
+</body>
+</html>

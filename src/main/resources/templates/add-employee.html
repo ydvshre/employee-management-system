@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Employee</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef1f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: white;
+            width: 1050px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.08);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-bottom: 2px solid #ccc;
+        }
+
+        .tab.active {
+            font-weight: bold;
+            border-bottom: 3px solid #333;
+        }
+
+        .form-section { display: none; }
+        .form-section.active { display: block; }
+
+        .row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .row input, .row select {
+            flex: 1;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .readonly-id {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .date-field {
+            position: relative;
+            flex: 1;
+        }
+
+        .date-field input {
+            width: 100%;
+            padding: 12px 8px;
+        }
+
+        .date-field label {
+            position: absolute;
+            top: 50%;
+            left: 8px;
+            font-size: 13px;
+            transform: translateY(-50%);
+            pointer-events: none;
+            transition: 0.3s;
+            background: white;
+            padding: 0 4px;
+        }
+
+        .date-field input:focus + label,
+        .date-field input:not(:placeholder-shown) + label {
+            top: -6px;
+            font-size: 11px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+    </style>
+
+    <script>
+        function showTab(tabId) {
+            document.getElementById("dept").classList.remove("active");
+            document.getElementById("personal").classList.remove("active");
+            document.getElementById(tabId).classList.add("active");
+
+            document.getElementById("tab1").classList.remove("active");
+            document.getElementById("tab2").classList.remove("active");
+            document.getElementById(tabId === 'dept' ? "tab1" : "tab2").classList.add("active");
+        }
+
+        function toggleContractDates(value) {
+            document.getElementById("contractDates").style.display =
+                value === 'Contract' ? 'block' : 'none';
+        }
+
+        function toggleSpouse(value) {
+            document.getElementById("spouseRow").style.display =
+                value === 'Married' ? 'flex' : 'none';
+        }
+
+        function validateIdentity() {
+            const aadhaar = document.getElementById("aadhaar").value.trim();
+            const license = document.getElementById("license").value.trim();
+            if (aadhaar === "" && license === "") {
+                alert("Please provide Aadhaar OR Driving License");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Add Employee</h2>
+
+<div class="tabs">
+    <div class="tab active" id="tab1" onclick="showTab('dept')">Department Info</div>
+    <div class="tab" id="tab2" onclick="showTab('personal')">Personal Info</div>
+</div>
+
+<form method="post"
+      action="/admin/saveEmployee"
+      th:object="${employee}"
+      onsubmit="return validateIdentity()">
+
+
+<!-- ================= DEPARTMENT ================= -->
+<div class="form-section active" id="dept">
+
+<div class="row">
+    <div class="readonly-id">
+        Employee ID: <span th:text="${nextEmployeeId}"></span>
+    </div>
+    <input type="text" name="title" placeholder="Title">
+</div>
+
+<div class="row">
+    <input type="text" name="firstName" placeholder="First Name *"
+           pattern="[A-Za-z ]+" required>
+
+    <input type="text" name="middleName" placeholder="Middle Name"
+           pattern="[A-Za-z ]*">
+
+    <input type="text" name="lastName" placeholder="Last Name *"
+           pattern="[A-Za-z ]+" required>
+</div>
+
+<div class="row">
+    <input type="text" name="department" placeholder="Department *" required>
+    <input type="text" name="designation" placeholder="Designation">
+</div>
+
+<div class="row">
+    <input type="text" name="payScale" placeholder="Pay Scale *" required>
+    <input type="number" name="basicSalary" placeholder="Basic Salary *" min="0" required>
+</div>
+
+<div class="row">
+    <select name="employeeClass">
+        <option value="">Employee Class</option>
+        <option>Upper</option>
+        <option>Middle</option>
+        <option>Lower</option>
+    </select>
+
+    <select name="natureOfAppointment" onchange="toggleContractDates(this.value)">
+        <option value="">Nature of Appointment</option>
+        <option>Permanent</option>
+        <option>Contract</option>
+    </select>
+</div>
+
+<div class="row">
+    <div class="date-field">
+        <input type="date" name="dateOfJoining" required>
+        <label>Date of Joining</label>
+    </div>
+</div>
+
+<div id="contractDates" style="display:none;">
+    <div class="row">
+        <div class="date-field">
+            <input type="date" name="contractStartDate">
+            <label>Contract Start</label>
+        </div>
+        <div class="date-field">
+            <input type="date" name="contractEndDate">
+            <label>Contract End</label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="date-field">
+        <input type="date" name="confirmationDate">
+        <label>Confirmation Date</label>
+    </div>
+</div>
+
+</div>
+
+<!-- ================= PERSONAL ================= -->
+<div class="form-section" id="personal">
+
+<div class="row">
+    <input type="text" name="fatherName" placeholder="Father Name" pattern="[A-Za-z ]*">
+    <input type="text" name="motherName" placeholder="Mother Name" pattern="[A-Za-z ]*">
+</div>
+
+<div class="row">
+    <select name="maritalStatus" onchange="toggleSpouse(this.value)">
+        <option value="">Marital Status</option>
+        <option>Single</option>
+        <option>Married</option>
+    </select>
+
+    <select name="gender">
+        <option value="">Gender</option>
+        <option>Male</option>
+        <option>Female</option>
+        <option>Other</option>
+    </select>
+</div>
+
+<div class="row" id="spouseRow" style="display:none;">
+    <input type="text" name="spouseName" placeholder="Spouse Name" pattern="[A-Za-z ]*">
+</div>
+
+<div class="row">
+    <div class="date-field">
+       <input type="date"
+       th:field="*{dateOfBirth}"
+       required
+       max="2006-12-31">
+
+
+        <label>Date of Birth</label>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Aadhaar Number (12 digits)</label>
+        <input type="text"
+               id="aadhaar"
+               name="aadhaarNumber"
+               th:field="*{aadhaarNumber}"
+               maxlength="12"
+               pattern="[0-9]{12}"
+               title="Aadhaar must be exactly 12 digits">
+        <small class="error" th:errors="*{aadhaarNumber}"></small>
+    </div>
+
+    <div class="field">
+        <label>Driving License Number (16 characters)</label>
+        <input type="text"
+               id="license"
+               name="drivingLicenseNumber"
+               th:field="*{drivingLicenseNumber}"
+               maxlength="16"
+               pattern="[A-Za-z0-9]{16}"
+               title="License must be exactly 16 alphanumeric characters">
+        <small class="error" th:errors="*{drivingLicenseNumber}"></small>
+    </div>
+</div>
+
+<div class="row">
+    <select name="category">
+        <option value="">Category</option>
+        <option>General</option>
+        <option>OBC</option>
+        <option>SC</option>
+        <option>ST</option>
+    </select>
+</div>
+
+<div class="row">
+    <input type="email" name="email" placeholder="Email">
+    <input type="text" name="mobile"
+           placeholder="Mobile Number"
+           pattern="[0-9]{10}">
+</div>
+
+<div class="row">
+    <input type="text" name="address" placeholder="Address">
+</div>
+
+<div class="row">
+    <input type="text" name="city" placeholder="City">
+    <input type="text" name="state" placeholder="State">
+</div>
+<div th:if="${error}" style="color:red; text-align:center; margin-bottom:15px;">
+    <p th:text="${error}"></p>
+</div>
+
+</div>
+
+<div class="footer-buttons">
+    <button type="submit" class="btn">Save Employee</button>
+    <a href="/admin/home" class="btn">Back to Dashboard</a>
+</div>
+
+</form>
+
+</div>
+
+</body>
+</html>

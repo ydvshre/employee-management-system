@@ -1,0 +1,85 @@
+<style>
+    body {
+        background: #eef1f6;
+        font-family: Arial, Helvetica, sans-serif;
+        display: flex;
+        justify-content: center;
+    }
+
+    .container {
+        margin-top: 80px;
+        text-align: center;
+        width: 800px;
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        box-shadow: 0px 15px 35px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+        font-size: 26px;
+        color: #333;
+    }
+
+    h3 {
+        margin-top: -5px;
+        color: #666;
+        font-weight: normal;
+    }
+
+    .btn-box {
+        margin-top: 40px;
+        display: flex;
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .action-btn {
+        width: 240px;
+        padding: 14px;
+        font-size: 17px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        background: #f4f6f9;
+        text-decoration: none;
+        color: black;
+        cursor: pointer;
+        text-align: center;
+        transition: 0.2s;
+    }
+
+    .action-btn:hover {
+        background: #dfe4ee;
+    }
+
+    .logout-btn {
+        margin-top: 30px;
+        padding: 12px 30px;
+        font-size: 16px;
+        border-radius: 6px;
+        border: 2px solid #333;
+        background: white;
+        cursor: pointer;
+    }
+
+    .logout-btn:hover {
+        background: #333;
+        color: white;
+    }
+</style>
+
+<div class="container">
+
+    <h1>Welcome Sub-Admin</h1>
+    <h3>Employee Management System</h3>
+
+    <div class="btn-box">
+        <a href="/employee/view?role=subadmin" class="action-btn">View Employee</a>
+        <a href="#" class="action-btn">Generate Report</a>
+    </div>
+
+    <form action="/logout/subadmin" method="post">
+        <button class="logout-btn">Logout</button>
+    </form>
+
+</div>

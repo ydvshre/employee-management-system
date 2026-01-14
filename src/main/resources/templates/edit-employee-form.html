@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Employee</title>
+
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #eef1f6;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background: white;
+            width: 1050px;
+            margin: 30px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #ddd;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            border-bottom: 3px solid #333;
+            font-weight: bold;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 18px;
+        }
+
+        .field {
+            flex: 1;
+        }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .error {
+            color: red;
+            font-size: 12px;
+        }
+
+        .buttons {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .btn {
+            padding: 12px 26px;
+            font-size: 16px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #f5f5f5;
+            cursor: pointer;
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+
+    <script>
+        function showTab(tabId) {
+            document.getElementById("dept").classList.remove("active");
+            document.getElementById("personal").classList.remove("active");
+            document.getElementById(tabId).classList.add("active");
+
+            document.getElementById("tab1").classList.remove("active");
+            document.getElementById("tab2").classList.remove("active");
+            document.getElementById(tabId === 'dept' ? "tab1" : "tab2").classList.add("active");
+        }
+
+        function toggleContract(value) {
+            const row = document.getElementById("contractRow");
+            row.style.display = (value === 'Contract') ? 'flex' : 'none';
+        }
+
+        function validateIdentity() {
+            const aadhaar = document.getElementById("aadhaar").value.trim();
+            const license = document.getElementById("license").value.trim();
+
+            if (aadhaar === "" && license === "") {
+                alert("Either Aadhaar OR Driving License is required");
+                return false;
+            }
+            return true;
+        }
+
+        window.onload = function () {
+            const select = document.querySelector('[name="natureOfAppointment"]');
+            if (select) toggleContract(select.value);
+        };
+    </script>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Edit Employee</h2>
+
+<div class="tabs">
+    <div class="tab active" id="tab1" onclick="showTab('dept')">Department Info</div>
+    <div class="tab" id="tab2" onclick="showTab('personal')">Personal Info</div>
+</div>
+
+<form action="/admin/updateEmployee"
+      method="post"
+      th:object="${employee}"
+      onsubmit="return validateIdentity()">
+
+<input type="hidden" th:field="*{employeeId}"/>
+
+<!-- ================= DEPARTMENT ================= -->
+<div class="form-section active" id="dept">
+
+<div class="row">
+    <div class="field">
+        <label>Title</label>
+        <input type="text" th:field="*{title}">
+    </div>
+    <div class="field">
+        <label>Department *</label>
+        <input type="text" th:field="*{department}" required>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>First Name *</label>
+        <input type="text" th:field="*{firstName}" required>
+        <small class="error" th:errors="*{firstName}"></small>
+    </div>
+    <div class="field">
+        <label>Middle Name</label>
+        <input type="text" th:field="*{middleName}">
+    </div>
+    <div class="field">
+        <label>Last Name *</label>
+        <input type="text" th:field="*{lastName}" required>
+        <small class="error" th:errors="*{lastName}"></small>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Designation</label>
+        <input type="text" th:field="*{designation}">
+    </div>
+    <div class="field">
+        <label>Employee Class</label>
+        <select th:field="*{employeeClass}">
+            <option value="">Select</option>
+            <option value="Upper">Upper</option>
+            <option value="Middle">Middle</option>
+            <option value="Lower">Lower</option>
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Pay Scale *</label>
+        <input type="text" th:field="*{payScale}" required>
+    </div>
+    <div class="field">
+        <label>Basic Salary *</label>
+        <input type="number" th:field="*{basicSalary}" required>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Nature of Appointment *</label>
+        <select th:field="*{natureOfAppointment}"
+                name="natureOfAppointment"
+                onchange="toggleContract(this.value)"
+                required>
+            <option value="">Select</option>
+            <option value="Permanent">Permanent</option>
+            <option value="Contract">Contract</option>
+        </select>
+    </div>
+    <div class="field">
+        <label>Date of Joining *</label>
+        <input type="date" th:field="*{dateOfJoining}" required>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Confirmation Date</label>
+        <input type="date" th:field="*{confirmationDate}">
+    </div>
+</div>
+
+<div class="row" id="contractRow" style="display:none">
+    <div class="field">
+        <label>Contract Start</label>
+        <input type="date" th:field="*{contractStartDate}">
+    </div>
+    <div class="field">
+        <label>Contract End</label>
+        <input type="date" th:field="*{contractEndDate}">
+    </div>
+</div>
+
+</div>
+
+<!-- ================= PERSONAL ================= -->
+<div class="form-section" id="personal">
+
+<div class="row">
+    <div class="field">
+        <label>Father Name</label>
+        <input type="text" th:field="*{fatherName}">
+        <small class="error" th:errors="*{fatherName}"></small>
+    </div>
+    <div class="field">
+        <label>Mother Name</label>
+        <input type="text" th:field="*{motherName}">
+        <small class="error" th:errors="*{motherName}"></small>
+    </div>
+</div>
+<div class="row">
+    <div class="field">
+        <label>Marital Status</label>
+        <select th:field="*{maritalStatus}">
+            <option value="">Select</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+        </select>
+    </div>
+    <div class="field">
+        <label>Gender</label>
+        <select th:field="*{gender}">
+            <option value="">Select</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Date of Birth *</label>
+        <input type="date" th:field="*{dateOfBirth}" required>
+        <small class="error" th:errors="*{dateOfBirth}"></small>
+    </div>
+    <div class="field">
+        <label>Category</label>
+        <select th:field="*{category}">
+            <option value="">Select</option>
+            <option value="General">General</option>
+            <option value="OBC">OBC</option>
+            <option value="SC">SC</option>
+            <option value="ST">ST</option>
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    <div class="field">
+        <label>Aadhaar Number</label>
+        <input type="text" id="aadhaar"
+               th:field="*{aadhaarNumber}"
+               pattern="[0-9]{12}"
+               maxlength="12">
+        <small class="error" th:errors="*{aadhaarNumber}"></small>
+    </div>
+    <div class="field">
+        <label>Driving License Number</label>
+        <input type="text" id="license"
+               th:field="*{drivingLicenseNumber}"
+               pattern="[A-Za-z0-9]{16}"
+               maxlength="16">
+        <small class="error" th:errors="*{drivingLicenseNumber}"></small>
+    </div>
+</div>
+<div class="row">
+    <div class="field">
+        <label>Email</label>
+        <input type="email" th:field="*{email}">
+        <small class="error" th:errors="*{email}"></small>
+    </div>
+    <div class="field">
+        <label>Mobile</label>
+        <input type="text" th:field="*{mobile}">
+        <small class="error" th:errors="*{mobile}"></small>
+    </div>
+</div>
+<div class="row">
+    <div class="field">
+        <label>Address</label>
+        <input type="text" th:field="*{address}">
+    </div>
+</div>
+<div class="row">
+    <div class="field">
+        <label>City</label>
+        <input type="text" th:field="*{city}">
+    </div>
+    <div class="field">
+        <label>State</label>
+        <input type="text" th:field="*{state}">
+    </div>
+</div>
+<div th:if="${error}" style="color:red; text-align:center; margin-bottom:15px;">
+    <p th:text="${error}"></p>
+</div>
+
+</div>
+
+<div class="buttons">
+    <button type="submit" class="btn">Update Employee</button>
+    <a href="/admin/home" class="btn">Back</a>
+</div>
+
+</form>
+</div>
+
+</body>
+</html>

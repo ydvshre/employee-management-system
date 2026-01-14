@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit Employee</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #eef1f6;
+            display: flex;
+            justify-content: center;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            margin-top: 50px;
+            width: 500px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h2>Edit Employee</h2>
+
+    <form action="/admin/editEmployee" method="get">
+        <input type="number" name="employeeId"
+               placeholder="Enter Employee ID"
+               required style="width:100%; padding:10px">
+
+        <br><br>
+
+        <button type="submit" class="btn">Search</button>
+    </form>
+
+    <hr>
+
+    <div style="text-align:center">
+        <a href="/admin/home" class="btn">Back to Dashboard</a>
+    </div>
+</div>
+
+</body>
+</html>
+
