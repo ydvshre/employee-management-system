@@ -86,6 +86,17 @@
             margin-top: 20px;
             text-align: center;
         }
+        .highlight-row {
+    background-color: #fff3cd !important;
+    animation: blink 1.2s ease-in-out 2;
+}
+
+@keyframes blink {
+    0% { background-color: #fff3cd; }
+    50% { background-color: #ffe8a1; }
+    100% { background-color: #fff3cd; }
+}
+
 
         .btn {
             padding: 10px 20px;
@@ -103,6 +114,13 @@
         }
     </style>
 </head>
+
+<script th:if="${highlightId != null}">
+    const row = document.getElementById("row-[[${highlightId}]]");
+    if (row) {
+        row.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+</script>
 
 <body>
 
@@ -157,7 +175,10 @@
             </thead>
 
             <tbody>
-            <tr th:each="emp, stat : ${employees}">
+            <tr th:each="emp, stat : ${employees}"
+    th:id="'row-' + ${emp.employeeId}"
+    th:classappend="${highlightId == emp.employeeId} ? 'highlight-row' : ''">
+
                 <td th:text="${stat.index + 1}"></td>
                 <td th:text="${emp.employeeId}"></td>
                <td th:text="${emp.firstName 

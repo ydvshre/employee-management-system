@@ -90,8 +90,10 @@ public String saveEmployee(
 
     // 5️⃣ SAVE (DB-level unique: email/mobile safety)
     try {
-        employeeRepository.save(employee);
-        return "redirect:/admin/addEmployee?success";
+        Employee savedEmployee = employeeRepository.save(employee);
+Integer id = savedEmployee.getEmployeeId();
+
+return "redirect:/employee/view?highlightId=" + id;
     }
     catch (org.springframework.dao.DataIntegrityViolationException ex) {
 
@@ -116,16 +118,24 @@ public String saveEmployee(
 
 
     // ================= VIEW EMPLOYEES =================
-    @GetMapping("/employee/view")
-    public String viewEmployees(
-            @RequestParam(value = "role", defaultValue = "admin") String role,
-            Model model
-    ) {
-        model.addAttribute("employees", employeeRepository.findAll());
-        model.addAttribute("backUrl",
-                "subadmin".equals(role) ? "/subadmin/home" : "/admin/home");
-        return "view-employee";
-    }
+   @GetMapping("/employee/view")
+public String viewEmployees(
+        @RequestParam(value = "role", defaultValue = "admin") String role,
+        @RequestParam(value = "highlightId", required = false) Integer highlightId,
+        Model model
+) {
+    model.addAttribute(
+        "employees",
+        employeeRepository.findAllByOrderByEmployeeIdAsc()
+    );
+
+    model.addAttribute("highlightId", highlightId);
+
+    model.addAttribute("backUrl",
+            "subadmin".equals(role) ? "/subadmin/home" : "/admin/home");
+
+    return "view-employee";
+}
 
     // ================= SEARCH =================
     @GetMapping("/employee/search")
