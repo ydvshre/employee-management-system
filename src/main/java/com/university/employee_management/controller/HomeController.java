@@ -13,15 +13,8 @@ public class HomeController {
     public String index() {
         return "index";
     }
-    @GetMapping("/login")
-public String login(@RequestParam String role) {
-    if ("admin".equals(role)) {
-        return "redirect:/admin/home";
-    } else if ("subadmin".equals(role)) {
-        return "redirect:/subadmin/home";
-    }
-    return "index";
+   
 }
 
-}
+
 
