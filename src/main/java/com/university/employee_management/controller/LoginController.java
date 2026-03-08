@@ -10,7 +10,7 @@ import org.springframework.ui.Model;
 public class LoginController {
 
     @GetMapping("/login")
-    public String loginPage(@RequestParam String role, Model model) {
+    public String loginPage(@RequestParam(required = false) String role, Model model) {
         model.addAttribute("role", role);
         return "login";
     }

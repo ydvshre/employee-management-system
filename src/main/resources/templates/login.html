@@ -3,69 +3,116 @@
 <head>
     <title>Login</title>
 
-    <style>
-        body {
-            font-family: Arial;
-            background: #eef1f6;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+   <style>
+/* ===== PAGE BACKGROUND ===== */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-        .login-box {
-            background: white;
-            padding: 35px;
-            width: 420px;
-            border-radius: 12px;
-            box-shadow: 0px 10px 30px rgba(0,0,0,0.1);
-            text-align: center;
-        }
+    background:
+        linear-gradient(rgba(238,241,246,0.6), rgba(238,241,246,0.6)),
+        url("/images/banasthali-bg.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
 
-        .logo {
-            width: 90px;
-            margin-bottom: 10px;
-        }
+/* ===== LOGIN CARD ===== */
+.login-box {
+    background: #1f2937;
+    padding: 32px;
+    width: 380px;
+    border-radius: 12px;
+    box-shadow: 0 18px 36px rgba(0,0,0,0.25);
+    text-align: center;
+    color: #e5e7eb;
+}
 
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 12px;
-        }
+/* ===== LOGO ===== */
+.logo {
+    width: 75px;
+    margin-bottom: 12px;
+}
 
-        button {
-            margin-top: 18px;
-            padding: 12px;
-            width: 100%;
-            background: #4a6fe3;
-            color: white;
-            border: none;
-            font-size: 16px;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+/* ===== HEADINGS ===== */
+h2 {
+    margin: 10px 0 6px;
+    font-size: 22px;
+    color: #ffffff;
+}
+
+p {
+    margin-top: 0;
+    font-size: 14px;
+    color: #cbd5e1;
+}
+
+/* ===== INPUT + BUTTON (SAME SIZE FIX) ===== */
+input,
+button {
+    width: 100%;
+    height: 44px;              /* 🔑 equal height */
+    padding: 0 12px;
+    margin-top: 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* ===== INPUT STYLE ===== */
+input {
+    border: 1px solid #374151;
+    background: #111827;
+    color: #ffffff;
+}
+
+input::placeholder {
+    color: #9ca3af;
+}
+
+input:focus {
+    outline: none;
+    border-color: #4a6fe3;
+}
+
+/* ===== BUTTON STYLE ===== */
+button {
+    background: #4a6fe3;
+    color: #ffffff;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #3a5bd8;
+}
+
+/* ===== ERROR ===== */
+.error {
+    color: #f87171;
+    margin-top: 14px;
+    font-size: 14px;
+}
+
+/* ===== BACK LINK ===== */
 .back-link {
     display: inline-block;
-    margin-top: 15px;
-    text-decoration: none;
+    margin-top: 18px;
     font-size: 14px;
-    color: #555;
+    color: #9ca3af;
+    text-decoration: none;
 }
 
 .back-link:hover {
-    color: #000;
+    color: #ffffff;
     text-decoration: underline;
 }
-
-        button:hover {
-            background: #3a5bd8;
-        }
-
-        .error {
-            color: red;
-            margin-top: 12px;
-        }
-    </style>
+</style>
 </head>
 
 <body>
@@ -89,7 +136,8 @@
     <div th:if="${error}" class="error">
         ❌ Username or password is wrong
     </div>
-<a href="/" class="back-link">← Back to Main Login</a>
+
+    <a href="/" class="back-link">← Back to Main Login</a>
 
 </div>
 

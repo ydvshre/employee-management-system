@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Employee Report</title>
+
+    <style>
+/* ================= GLOBAL ================= */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(238,241,246,0.65), rgba(238,241,246,0.65)),
+        url("/images/banasthali-bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
+
+/* ================= PAGE WRAPPER ================= */
+.page-box {
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+/* ================= MAIN CARD ================= */
+.container {
+    background: #1f2937;
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    color: #e5e7eb;
+}
+
+/* ================= TITLE ================= */
+h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #ffffff;
+}
+
+/* ================= ERROR ================= */
+.error {
+    text-align: center;
+    color: #f87171;
+    margin-bottom: 20px;
+}
+
+/* ================= TABLE ================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #111827;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Header */
+th {
+    background: #1f2937;
+    color: #c7d2fe;
+    padding: 14px;
+    font-weight: 600;
+    text-align: left;
+    border-bottom: 1px solid #374151;
+}
+
+/* Data cells */
+td {
+    padding: 14px;
+    border-bottom: 1px solid #374151;
+    color: #e5e7eb;
+}
+
+/* Hover row */
+tr:hover td {
+    background: rgba(255,255,255,0.04);
+}
+
+/* No data spacing */
+table tr:last-child td {
+    border-bottom: none;
+}
+    </style>
+</head>
+
+<body>
+
+<div class="page-box">
+    <div class="container">
+
+        <h2>Employee Report</h2>
+
+        <p th:text="${message}" class="error"></p>
+
+        <table th:if="${employees != null}">
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Department</th>
+                <th>Class</th>
+                <th>Designation</th>
+                <th>Date Of Joining</th>
+            </tr>
+
+            <tr th:each="emp : ${employees}">
+                <td th:text="${emp.employeeId}"></td>
+                <td th:text="${emp.firstName + ' ' + emp.lastName}"></td>
+                <td th:text="${emp.department}"></td>
+                <td th:text="${emp.employeeClass}"></td>
+                <td th:text="${emp.designation}"></td>
+                <td th:text="${emp.dateOfJoining}"></td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+</body>
+</html>

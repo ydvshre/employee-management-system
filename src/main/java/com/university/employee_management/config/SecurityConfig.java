@@ -12,10 +12,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
-                .authorizeHttpRequests(auth -> auth
-                        .anyRequest().permitAll()   // allow everything
-                )
-                .csrf(csrf -> csrf.disable());       // disable csrf so forms work
+            .authorizeHttpRequests(auth -> auth
+                .anyRequest().permitAll()
+            )
+            .csrf(csrf -> csrf.disable());
 
         return http.build();
     }

@@ -4,20 +4,24 @@
     <title>View Employees</title>
 
     <style>
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-            background: #eef1f6;
-        }
+       body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background:
+        linear-gradient(rgba(15,23,42,0.65), rgba(15,23,42,0.65)),
+        url("/images/banasthali-bg.jpg");
+    background-size: cover;
+    background-position: center;
+}
 
-        .container {
-            width: 96%;
-            margin: 30px auto;
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0px 10px 30px rgba(0,0,0,0.08);
-        }
-
+       .container {
+    background: #1f2937;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+    color: #e5e7eb;
+}
         /* ---------- HEADER ---------- */
         .header {
             display: flex;
@@ -87,14 +91,14 @@
             text-align: center;
         }
         .highlight-row {
-    background-color: #fff3cd !important;
+    background-color:rgba(255, 243, 205, 0.25) !important;
     animation: blink 1.2s ease-in-out 2;
 }
 
 @keyframes blink {
-    0% { background-color: #fff3cd; }
-    50% { background-color: #ffe8a1; }
-    100% { background-color: #fff3cd; }
+    0% { background-color: rgba(255, 243, 205, 0.25); }
+    50% { background-color: rgba(255, 243, 205, 0.15); }
+    100% { background-color: rgba(255, 243, 205, 0.25); }
 }
 
 
@@ -112,6 +116,68 @@
         .btn:hover {
             background: #e0e4ec;
         }
+        /* ================= VIEW EMPLOYEE TABLE ================= */
+
+.table-wrapper {
+    margin-top: 25px;
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+/* Table base */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 1200px;
+    background: #111827;
+    color: #e5e7eb;
+}
+
+/* Header */
+thead th {
+    position: sticky;
+    top: 0;
+    background: #1f2937;
+    color: #c7d2fe;
+    font-weight: 600;
+    padding: 14px 12px;
+    border-bottom: 1px solid #374151;
+    text-align: left;
+    white-space: nowrap;
+    z-index: 2;
+}
+
+/* Body cells */
+tbody td {
+    padding: 12px 12px;
+    border-bottom: 1px solid #374151;
+    white-space: nowrap;
+}
+
+/* Zebra rows */
+tbody tr:nth-child(even) {
+    background: #0f172a;
+}
+
+/* Hover effect */
+tbody tr:hover {
+    background: rgba(74, 111, 227, 0.12);
+    transition: 0.2s ease;
+}
+
+/* Scrollbar styling */
+.table-wrapper::-webkit-scrollbar {
+    height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #4a6fe3;
+    border-radius: 6px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #1f2937;
+}
     </style>
 </head>
 
@@ -123,7 +189,7 @@
 </script>
 
 <body>
-
+ <div class="page-box">
 <div class="container">
 
     <!-- ===== HEADER ===== -->
@@ -224,6 +290,6 @@
     </div>
 
 </div>
-
+</div>
 </body>
 </html>

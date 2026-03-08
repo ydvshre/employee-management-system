@@ -4,7 +4,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.time.LocalDate;
-import java.time.LocalDate;
 import java.time.Period;
 
 @Entity

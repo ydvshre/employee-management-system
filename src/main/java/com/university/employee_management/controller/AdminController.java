@@ -15,7 +15,7 @@ import java.util.List;
 @Controller
 public class AdminController {
 
-    @Autowired(required = false)
+    @Autowired
     private EmployeeRepository employeeRepository;
 
     // ================= DASHBOARD =================
@@ -46,74 +46,133 @@ public String saveEmployee(
         Model model
 ) {
 
-    // 1️⃣ Bean Validation (patterns, @AssertTrue, age, etc.)
+    // ================= 1️⃣ BASIC BEAN VALIDATION =================
     if (result.hasErrors()) {
         return "add-employee";
     }
 
-    // 2️⃣ UNIQUE AADHAAR CHECK (only if provided)
-    if (employee.getAadhaarNumber() != null &&
-        !employee.getAadhaarNumber().isBlank()) {
+    // ================= 2️⃣ NORMALIZE EMPTY STRINGS =================
+    // VERY IMPORTANT (prevents UNIQUE chaos)
 
+    if (employee.getAadhaarNumber() != null &&
+        employee.getAadhaarNumber().isBlank()) {
+        employee.setAadhaarNumber(null);
+    }
+
+    if (employee.getDrivingLicenseNumber() != null &&
+        employee.getDrivingLicenseNumber().isBlank()) {
+        employee.setDrivingLicenseNumber(null);
+    }
+
+    // ================= 3️⃣ AT LEAST ONE ID REQUIRED =================
+    if (employee.getAadhaarNumber() == null &&
+        employee.getDrivingLicenseNumber() == null) {
+
+        result.reject(
+            "identity",
+            "Either Aadhaar OR Driving License must be provided"
+        );
+        return "add-employee";
+    }
+
+    // ================= 4️⃣ UNIQUE AADHAAR CHECK =================
+    if (employee.getAadhaarNumber() != null) {
         if (employeeRepository
                 .findByAadhaarNumber(employee.getAadhaarNumber())
                 .isPresent()) {
 
             result.rejectValue(
-                    "aadhaarNumber",
-                    "error.employee",
-                    "Aadhaar number already exists"
+                "aadhaarNumber",
+                "error.employee",
+                "Aadhaar number already exists"
             );
         }
     }
 
-    // 3️⃣ UNIQUE LICENSE CHECK (only if provided)
-    if (employee.getDrivingLicenseNumber() != null &&
-        !employee.getDrivingLicenseNumber().isBlank()) {
-
+    // ================= 5️⃣ UNIQUE LICENSE CHECK =================
+    if (employee.getDrivingLicenseNumber() != null) {
         if (employeeRepository
-                .findByDrivingLicenseNumber(employee.getDrivingLicenseNumber())
+                .findByDrivingLicenseNumber(
+                        employee.getDrivingLicenseNumber())
                 .isPresent()) {
 
             result.rejectValue(
-                    "drivingLicenseNumber",
-                    "error.employee",
-                    "Driving License number already exists"
+                "drivingLicenseNumber",
+                "error.employee",
+                "Driving License number already exists"
             );
         }
     }
 
-    // 4️⃣ If ANY uniqueness error → return form
+    // ================= 6 UNIQUE EMAIL CHECK (MISSING BEFORE) =================
+    if (employee.getEmail() != null &&
+        !employee.getEmail().isBlank()) {
+
+        if (employeeRepository.findByEmail(employee.getEmail()).isPresent()) {
+            result.rejectValue(
+                    "email",
+                    "error.employee",
+                    "Email already exists"
+            );
+        }
+    }
+
+    // ================= 7 UNIQUE MOBILE CHECK (MISSING BEFORE) =================
+    if (employee.getMobile() != null &&
+        !employee.getMobile().isBlank()) {
+
+        if (employeeRepository.findByMobile(employee.getMobile()).isPresent()) {
+            result.rejectValue(
+                    "mobile",
+                    "error.employee",
+                    "Mobile number already exists"
+            );
+        }
+    }
+
+    // ================= 8 RETURN IF ANY ERROR =================
     if (result.hasErrors()) {
         return "add-employee";
     }
 
-    // 5️⃣ SAVE (DB-level unique: email/mobile safety)
+    // ================= 9 SAVE =================
     try {
         Employee savedEmployee = employeeRepository.save(employee);
-Integer id = savedEmployee.getEmployeeId();
-
-return "redirect:/employee/view?highlightId=" + id;
+        Integer id = savedEmployee.getEmployeeId();
+        return "redirect:/employee/view?highlightId=" + id;
     }
     catch (org.springframework.dao.DataIntegrityViolationException ex) {
 
-        String msg = ex.getMostSpecificCause().getMessage();
+    String msg = "";
 
-        if (msg.contains("mobile")) {
-            model.addAttribute("error", "Mobile number already exists");
-        } else if (msg.contains("email")) {
-            model.addAttribute("error", "Email already exists");
-        } else if (msg.contains("aadhaar")) {
-            model.addAttribute("error", "Aadhaar number already exists");
-        } else if (msg.contains("driving")) {
-            model.addAttribute("error", "Driving License number already exists");
-        } else {
-            model.addAttribute("error", "Duplicate data detected");
-        }
-
-        return "add-employee";
+    if (ex.getMostSpecificCause() != null) {
+        msg = ex.getMostSpecificCause().getMessage().toLowerCase();
     }
+
+    if (msg.contains("mobile")) {
+        model.addAttribute("error", "Mobile number already exists");
+    }
+    else if (msg.contains("email")) {
+        model.addAttribute("error", "Email already exists");
+    }
+    else if (msg.contains("aadhaar")) {
+        model.addAttribute("error", "Aadhaar number already exists");
+    }
+    else if (msg.contains("driving")) {
+        model.addAttribute("error", "Driving License number already exists");
+    }
+    else {
+        model.addAttribute(
+            "error",
+            "Duplicate value found in a unique field. Please check your input."
+        );
+    }
+
+    return "add-employee";
 }
+
+}
+
 
 
 
@@ -160,7 +219,7 @@ public String showEditForm(@RequestParam Integer employeeId, Model model) {
 
     return employeeRepository.findById(employeeId)
             .map(emp -> {
-                model.addAttribute("employee", emp);
+                model.addAttribute("employee", emp) ;
                 model.addAttribute("dobMax", LocalDate.now().minusYears(18));
                 return "edit-employee-form";
             })
@@ -174,6 +233,7 @@ public String updateEmployee(
         BindingResult result,
         Model model
 ) {
+    
 
     // ---------- 1️⃣ BEAN VALIDATION ----------
     if (result.hasErrors()) {
