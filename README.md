@@ -74,5 +74,3 @@ subadmin dashbboard:
 
 Shreya Yadav
 
-
-## Project Structure
